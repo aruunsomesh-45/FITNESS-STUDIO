@@ -14,11 +14,13 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://zokufitness.com'), // Update with your actual production URL
   title: "Zoku | Fitness Redefined",
   description: "Join the Zoku movement. Premium fitness for everyone.",
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: "/zoku-logo.jpg",
+    apple: "/zoku-logo.jpg",
+    shortcut: "/zoku-logo.jpg",
   },
   openGraph: {
     title: "Zoku | Fitness Redefined",

@@ -36,9 +36,15 @@ export function Navbar() {
             )}
         >
             <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-2 group">
-                    <div className="relative h-10 w-10 group-hover:scale-110 transition-transform">
-                        <Image src="/logo.png" alt="Zoku Logo" fill className="object-contain" />
+                <Link href="/" className="flex items-center gap-3 group">
+                    <div className="relative h-12 w-12 group-hover:scale-110 transition-transform">
+                        <Image
+                            src="/zoku-logo.jpg"
+                            alt="Zoku Fitness Logo"
+                            fill
+                            className="object-contain"
+                            priority
+                        />
                     </div>
                     <span className="text-2xl font-bold tracking-tighter uppercase">Zoku</span>
                 </Link>
@@ -99,4 +105,3 @@ export function Navbar() {
         </nav>
     );
 }
-

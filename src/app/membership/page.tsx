@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Navbar } from "@/components/Navbar";
@@ -8,7 +9,16 @@ import { Layers, Monitor, Users, Building2 } from "lucide-react";
 
 import { MembershipHero } from "@/components/MembershipHero";
 
+import { useState, useEffect } from "react";
+import { PopupModal } from "react-calendly";
+
 export default function MembershipPage() {
+    const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
+    const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+
+    useEffect(() => {
+        setRootElement(document.body);
+    }, []);
     const plans = [
         {
             id: "starter",
@@ -80,10 +90,20 @@ export default function MembershipPage() {
                     buttonLabel="Start Now"
                     plans={plans}
                     defaultAnnual={false}
+                    onPlanSelect={() => setIsCalendlyOpen(true)}
                 />
                 <TestimonialsGallery />
             </div>
             <Footer />
+
+            {rootElement && (
+                <PopupModal
+                    url="https://calendly.com/zoku-fitness" // TODO: Replace with your actual Calendly URL
+                    onModalClose={() => setIsCalendlyOpen(false)}
+                    open={isCalendlyOpen}
+                    rootElement={rootElement}
+                />
+            )}
         </main>
     );
 }

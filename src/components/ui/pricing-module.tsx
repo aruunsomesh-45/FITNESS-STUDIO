@@ -39,6 +39,7 @@ export interface PricingModuleProps {
     plans: PricingPlan[];
     defaultAnnual?: boolean;
     className?: string;
+    onPlanSelect?: (planId: string) => void;
 }
 
 export function PricingModule({
@@ -49,6 +50,7 @@ export function PricingModule({
     plans,
     defaultAnnual = false,
     className,
+    onPlanSelect,
 }: PricingModuleProps) {
     const [isAnnual, setIsAnnual] = React.useState(defaultAnnual);
 
@@ -122,6 +124,7 @@ export function PricingModule({
                                     <Button
                                         variant={plan.recommended ? "default" : "outline"}
                                         className="w-full mb-6"
+                                        onClick={() => onPlanSelect?.(plan.id)}
                                     >
                                         {buttonLabel}
                                     </Button>
