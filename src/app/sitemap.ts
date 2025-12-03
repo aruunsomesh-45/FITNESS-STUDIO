@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next'
+import { env } from '@/lib/env'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://zokufitness.com' // Update with your actual domain
+    const baseUrl = env.site.url
 
     return [
         {

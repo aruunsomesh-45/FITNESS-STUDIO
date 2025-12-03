@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import { MapPin, Phone, Mail, CheckCircle2, AlertCircle, Loader2, Calendar } from "lucide-react";
+import { env } from "@/lib/env";
 
 interface FormData {
     name: string;
@@ -169,7 +170,7 @@ export function Contact() {
                                 </div>
                                 <div>
                                     <h4 className="text-lg font-bold uppercase mb-1">Location</h4>
-                                    <p className="text-muted-foreground">123 Fitness Blvd, Metro City, ST 12345</p>
+                                    <p className="text-muted-foreground">{env.contact.address}</p>
                                 </div>
                             </div>
 
@@ -179,7 +180,7 @@ export function Contact() {
                                 </div>
                                 <div>
                                     <h4 className="text-lg font-bold uppercase mb-1">Phone</h4>
-                                    <p className="text-muted-foreground">+1 (555) 123-4567</p>
+                                    <p className="text-muted-foreground">{env.contact.phone}</p>
                                 </div>
                             </div>
 
@@ -189,7 +190,7 @@ export function Contact() {
                                 </div>
                                 <div>
                                     <h4 className="text-lg font-bold uppercase mb-1">Email</h4>
-                                    <p className="text-muted-foreground">hello@zokufitness.com</p>
+                                    <p className="text-muted-foreground">{env.contact.email}</p>
                                 </div>
                             </div>
                         </div>
@@ -323,7 +324,7 @@ export function Contact() {
                             </button>
 
                             <a
-                                href="https://calendly.com/zoku-fitness"
+                                href={env.calendly.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full bg-transparent border border-white/10 text-white py-4 font-bold uppercase tracking-wider hover:bg-white/5 transition-colors flex items-center justify-center gap-2 rounded-sm"

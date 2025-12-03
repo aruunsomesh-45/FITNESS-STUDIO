@@ -11,6 +11,7 @@ import { MembershipHero } from "@/components/MembershipHero";
 
 import { useState, useEffect } from "react";
 import { PopupModal } from "react-calendly";
+import { env } from "@/lib/env";
 
 export default function MembershipPage() {
     const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
@@ -98,7 +99,7 @@ export default function MembershipPage() {
 
             {rootElement && (
                 <PopupModal
-                    url="https://calendly.com/zoku-fitness" // TODO: Replace with your actual Calendly URL
+                    url={env.calendly.url}
                     onModalClose={() => setIsCalendlyOpen(false)}
                     open={isCalendlyOpen}
                     rootElement={rootElement}

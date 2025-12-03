@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, Mail, Phone, Dumbbell, Users, Clock } from "lucide-react";
 import { HorizonHero } from "@/components/ui/horizon-hero-section";
 import { GlowCard } from "@/components/ui/spotlight-card";
+import { env } from "@/lib/env";
 
 export default function Home() {
   return (
@@ -158,7 +159,7 @@ export default function Home() {
             </Link>
             <div className="flex items-center gap-2 text-white/80">
               <Phone className="h-5 w-5 text-primary" />
-              <span className="text-lg font-medium">+1 (555) 123-4567</span>
+              <span className="text-lg font-medium">{env.contact.phone}</span>
             </div>
           </div>
         </div>

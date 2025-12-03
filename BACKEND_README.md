@@ -65,8 +65,8 @@ src/
 Create a `.env.local` file in the project root:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=https://whwkktrecqssjfdvuicz.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indod2trdHJlY3Fzc2pmZHZ1aWN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ1NjkyNTMsImV4cCI6MjA4MDE0NTI1M30.uld1dwigRAiHbG49bunLjAHJC8lnqk-WIblqsuLvdGI
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
 
 Then update `src/lib/supabase.ts` to use environment variables:

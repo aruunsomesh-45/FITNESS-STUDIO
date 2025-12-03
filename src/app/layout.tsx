@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Oswald } from "next/font/google";
 import "./globals.css";
 import { ConsultationChatbot } from "@/components/ConsultationChatbot";
+import { env } from "@/lib/env";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -14,13 +15,18 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://zokufitness.com'), // Update with your actual production URL
+  metadataBase: new URL(env.site.url),
   title: "Zoku | Fitness Redefined",
   description: "Join the Zoku movement. Premium fitness for everyone.",
   icons: {
-    icon: "/zoku-logo.jpg",
-    apple: "/zoku-logo.jpg",
-    shortcut: "/zoku-logo.jpg",
+    icon: [
+      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/favicon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/favicon.png",
   },
   openGraph: {
     title: "Zoku | Fitness Redefined",
@@ -54,6 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${inter.variable} ${oswald.variable} antialiased bg-background text-foreground`}
       >
         {children}
