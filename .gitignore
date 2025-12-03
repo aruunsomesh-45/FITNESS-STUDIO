@@ -40,13 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-<<<<<<< HEAD
-
 # build logs and test files
 build_log*.txt
 lint_log.txt
 test-*.js
 *.log
-=======
 .env
->>>>>>> 77f1d7be5ad355c0564ff4c48a4aabaa98c035b6
