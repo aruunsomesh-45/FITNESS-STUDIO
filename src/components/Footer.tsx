@@ -31,23 +31,41 @@ export function Footer() {
                     <div>
                         <h4 className="text-lg font-bold uppercase mb-6 text-primary">Support</h4>
                         <ul className="space-y-3 text-muted-foreground">
-                            <li><Link href="#" className="hover:text-white transition-colors">FAQ</Link></li>
+                            <li><Link href="/contact#faq" className="hover:text-white transition-colors">FAQ</Link></li>
                             <li><Link href="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                            <li><Link href="/contact#privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                            <li><Link href="/contact#terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="text-lg font-bold uppercase mb-6 text-primary">Connect</h4>
                         <div className="flex gap-4 mb-6">
-                            <Link href="#" className="bg-white/5 p-3 rounded-full hover:bg-primary hover:text-primary-foreground transition-all">
+                            <Link 
+                                href="https://instagram.com/zokufitness" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                aria-label="Follow us on Instagram"
+                                className="bg-white/5 p-3 rounded-full hover:bg-primary hover:text-primary-foreground transition-all"
+                            >
                                 <Instagram className="h-5 w-5" />
                             </Link>
-                            <Link href="#" className="bg-white/5 p-3 rounded-full hover:bg-primary hover:text-primary-foreground transition-all">
+                            <Link 
+                                href="https://twitter.com/zokufitness" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                aria-label="Follow us on Twitter"
+                                className="bg-white/5 p-3 rounded-full hover:bg-primary hover:text-primary-foreground transition-all"
+                            >
                                 <Twitter className="h-5 w-5" />
                             </Link>
-                            <Link href="#" className="bg-white/5 p-3 rounded-full hover:bg-primary hover:text-primary-foreground transition-all">
+                            <Link 
+                                href="https://facebook.com/zokufitness" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                aria-label="Follow us on Facebook"
+                                className="bg-white/5 p-3 rounded-full hover:bg-primary hover:text-primary-foreground transition-all"
+                            >
                                 <Facebook className="h-5 w-5" />
                             </Link>
                         </div>

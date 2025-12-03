@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface PageHeroProps {
     title: string;
@@ -12,10 +13,13 @@ export function PageHero({ title, subtitle, image, className }: PageHeroProps) {
         <section className={cn("relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden", className)}>            {/* Background Image with Overlay */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-black/60 z-10" />
-                <img
+                <Image
                     src={image}
                     alt={title}
-                    className="w-full h-full object-cover"
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                    priority
                 />
             </div>
 

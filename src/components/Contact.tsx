@@ -97,6 +97,19 @@ export function Contact() {
                 body: JSON.stringify(formData),
             });
 
+            // Check if response is JSON before parsing
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                // If we get HTML (error page), throw a more helpful error
+                const text = await response.text();
+                console.error("Non-JSON response received:", text.substring(0, 200));
+                throw new Error(
+                    response.status === 500
+                        ? "Server error. Please try again later or contact us directly."
+                        : "An unexpected error occurred. Please try again."
+                );
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
@@ -323,7 +336,7 @@ export function Contact() {
                             </button>
 
                             <a
-                                href="https://calendly.com/zoku-fitness"
+                                href={process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/zoku-fitness"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full bg-transparent border border-white/10 text-white py-4 font-bold uppercase tracking-wider hover:bg-white/5 transition-colors flex items-center justify-center gap-2 rounded-sm"

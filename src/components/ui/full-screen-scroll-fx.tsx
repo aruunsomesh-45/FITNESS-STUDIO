@@ -497,8 +497,9 @@ export const FullScreenScrollFX = forwardRef<HTMLDivElement, FullScreenFXProps>(
                                                 <img
                                                     ref={(el) => { if (el) bgRefs.current[i] = el; }}
                                                     src={s.background}
-                                                    alt=""
+                                                    alt={typeof s.title === 'string' ? s.title : `Background image for section ${i + 1}`}
                                                     className="fx-bg-img"
+                                                    aria-hidden="true"
                                                 />
                                                 <div className="fx-bg-overlay" />
                                             </>

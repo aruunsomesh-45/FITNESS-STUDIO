@@ -1,0 +1,162 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "Next.js 16.0.5",
+    "React 19.2.0",
+    "Supabase",
+    "Tailwind CSS",
+    "Framer Motion",
+    "GSAP",
+    "Three.js",
+    "Calendly"
+  ],
+  "features": [
+    {
+      "name": "Contact Form API",
+      "description": "Handles contact form submissions with validation and stores them in Supabase contact_messages table",
+      "files": [
+        "src/app/api/contact/route.ts",
+        "src/components/Contact.tsx"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Contact Form API",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/api/contact": {
+            "post": {
+              "summary": "Submit contact form",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "required": ["name", "email", "subject", "message"],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 2,
+                          "maxLength": 100
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email",
+                          "maxLength": 255
+                        },
+                        "subject": {
+                          "type": "string",
+                          "enum": ["General Inquiry", "Membership", "Personal Training", "Careers"]
+                        },
+                        "message": {
+                          "type": "string",
+                          "minLength": 10,
+                          "maxLength": 1000
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Message sent successfully"
+                },
+                "400": {
+                  "description": "Validation error"
+                },
+                "500": {
+                  "description": "Server error"
+                }
+              }
+            },
+            "get": {
+              "summary": "Retrieve contact messages (admin/debug)",
+              "responses": {
+                "200": {
+                  "description": "List of messages"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Home Page",
+      "description": "Main landing page with hero section, about preview, classes preview, membership preview, and contact preview",
+      "files": [
+        "src/app/page.tsx",
+        "src/components/HorizonHero.tsx",
+        "src/components/ui/horizon-hero-section.tsx"
+      ]
+    },
+    {
+      "name": "About Page",
+      "description": "About page showcasing gym information, achievements, trainers, and workout types",
+      "files": [
+        "src/app/about/page.tsx",
+        "src/components/About.tsx",
+        "src/components/AboutMarqueeHero.tsx",
+        "src/components/Achievements.tsx",
+        "src/components/Trainers.tsx",
+        "src/components/WorkoutTypes.tsx"
+      ]
+    },
+    {
+      "name": "Classes Page",
+      "description": "Displays available fitness classes with descriptions and images",
+      "files": [
+        "src/app/classes/page.tsx",
+        "src/components/Classes.tsx",
+        "src/components/ClassesHero.tsx",
+        "src/components/BrandCarousel.tsx"
+      ]
+    },
+    {
+      "name": "Membership Page",
+      "description": "Membership plans with pricing, features, and Calendly integration for scheduling",
+      "files": [
+        "src/app/membership/page.tsx",
+        "src/app/membership/layout.tsx",
+        "src/components/MembershipHero.tsx",
+        "src/components/ui/pricing-module.tsx",
+        "src/components/TestimonialsGallery.tsx"
+      ]
+    },
+    {
+      "name": "Contact Page",
+      "description": "Contact form with validation, Supabase integration, and Calendly scheduling link",
+      "files": [
+        "src/app/contact/page.tsx",
+        "src/components/Contact.tsx",
+        "src/components/ContactHero.tsx"
+      ]
+    },
+    {
+      "name": "Supabase Integration",
+      "description": "Database client setup with environment variable validation, server-side and client-side clients",
+      "files": [
+        "src/lib/supabase.ts",
+        "src/lib/database.types.ts"
+      ]
+    },
+    {
+      "name": "Navigation",
+      "description": "Responsive navbar with mobile menu, scroll effects, and active route highlighting",
+      "files": [
+        "src/components/Navbar.tsx"
+      ]
+    },
+    {
+      "name": "Footer",
+      "description": "Site footer with links, social media, and copyright",
+      "files": [
+        "src/components/Footer.tsx"
+      ]
+    }
+  ]
+}
+

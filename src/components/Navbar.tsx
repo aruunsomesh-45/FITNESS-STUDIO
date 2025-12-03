@@ -42,6 +42,7 @@ export function Navbar() {
                             src="/zoku-logo.jpg"
                             alt="Zoku Fitness Logo"
                             fill
+                            sizes="48px"
                             className="object-contain"
                             priority
                         />

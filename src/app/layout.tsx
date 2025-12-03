@@ -18,21 +18,26 @@ export const metadata: Metadata = {
   title: "Zoku | Fitness Redefined",
   description: "Join the Zoku movement. Premium fitness for everyone.",
   icons: {
-    icon: "/zoku-logo.jpg",
-    apple: "/zoku-logo.jpg",
-    shortcut: "/zoku-logo.jpg",
+    icon: [
+      { url: "/logo.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [
+      { url: "/logo.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/logo.png",
   },
   openGraph: {
     title: "Zoku | Fitness Redefined",
     description: "Join the Zoku movement. Premium fitness for everyone.",
-    url: "https://zoku.fitness",
+    url: "https://zokufitness.com",
     siteName: "Zoku",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/redefining-fitness.jpg",
         width: 1200,
         height: 630,
-        alt: "Zoku Fitness",
+        alt: "Zoku Fitness - Redefining Fitness",
       },
     ],
     locale: "en_US",
@@ -42,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Zoku | Fitness Redefined",
     description: "Join the Zoku movement. Premium fitness for everyone.",
-    images: ["/og-image.jpg"],
+    images: ["/redefining-fitness.jpg"],
   },
 };
 

@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import { GlowCard } from "@/components/ui/spotlight-card";
 
 const classes = [
@@ -76,10 +77,12 @@ export function Classes() {
                         >
                             <div className="group relative h-full w-full cursor-pointer">
                                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10" />
-                                <img
+                                <Image
                                     src={item.image}
                                     alt={item.title}
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    fill
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                                 />
 
                                 <div className="absolute inset-0 z-20 p-6 flex flex-col justify-end">
