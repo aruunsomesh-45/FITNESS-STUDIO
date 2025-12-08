@@ -4,13 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-<<<<<<< HEAD
+    "dev": "next dev",
     "build": "NEXT_DISABLE_TURBOPACK=1 next build",
     "build:win": "set NEXT_DISABLE_TURBOPACK=1 && next build",
-=======
-    "build": "next build",
-    "build:legacy": "cross-env NEXT_DISABLE_TURBOPACK=1 next build",
->>>>>>> e32c146c101c0cf96e47ce9471a9c296a67da570
     "start": "next start",
     "lint": "eslint"
   },

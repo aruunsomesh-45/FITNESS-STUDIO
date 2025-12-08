@@ -20,7 +20,6 @@ export const metadata: Metadata = {
   description: "Join the Zoku movement. Premium fitness for everyone.",
   icons: {
     icon: [
-<<<<<<< HEAD
       { url: "/favicon.png", sizes: "32x32", type: "image/png" },
       { url: "/favicon.png", sizes: "192x192", type: "image/png" },
     ],
@@ -28,15 +27,6 @@ export const metadata: Metadata = {
       { url: "/favicon.png", sizes: "180x180", type: "image/png" },
     ],
     shortcut: "/favicon.png",
-=======
-      { url: "/logo.png", sizes: "32x32", type: "image/png" },
-      { url: "/logo.png", sizes: "16x16", type: "image/png" },
-    ],
-    apple: [
-      { url: "/logo.png", sizes: "180x180", type: "image/png" },
-    ],
-    shortcut: "/logo.png",
->>>>>>> e32c146c101c0cf96e47ce9471a9c296a67da570
   },
   openGraph: {
     title: "Zoku | Fitness Redefined",

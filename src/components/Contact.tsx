@@ -337,11 +337,7 @@ export function Contact() {
                             </button>
 
                             <a
-<<<<<<< HEAD
                                 href={env.calendly.url}
-=======
-                                href={process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/zoku-fitness"}
->>>>>>> e32c146c101c0cf96e47ce9471a9c296a67da570
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full bg-transparent border border-white/10 text-white py-4 font-bold uppercase tracking-wider hover:bg-white/5 transition-colors flex items-center justify-center gap-2 rounded-sm"
