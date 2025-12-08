@@ -1,27 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 import { Database } from './database.types'
 
-/**
- * Environment variable validation
- * Ensures required Supabase credentials are present at build/runtime
- */
-function validateEnvVars() {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-    if (!url || !anonKey) {
-        const missingVars = []
-        if (!url) missingVars.push('NEXT_PUBLIC_SUPABASE_URL')
-        if (!anonKey) missingVars.push('NEXT_PUBLIC_SUPABASE_ANON_KEY')
-
-        throw new Error(
-            `Missing required environment variables: ${missingVars.join(', ')}\n` +
-            `Please ensure these are set in your .env.local file.`
-        )
-    }
-
-    return { url, anonKey }
-}
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 /**
  * Server-side environment variable validation
@@ -47,18 +28,24 @@ function validateServerEnvVars(): string | null {
     return serviceRoleKey
 }
 
-// Validate and get client-side environment variables
-const { url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY } = validateEnvVars()
-
 /**
  * Client-side Supabase client
  * Uses the anonymous key - safe to use in browser
  * Respects Row Level Security (RLS) policies
+ * 
+ * Resilient to missing env vars at build time (e.g. Netlify build)
  */
-export const supabase = createClient<Database>(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-)
+export const supabase = (supabaseUrl && supabaseAnonKey)
+    ? createClient<Database>(supabaseUrl, supabaseAnonKey)
+    : new Proxy({} as any, {
+        get: (target, prop) => {
+            if (prop === 'then') return undefined; // Avoid Promise-like behavior checks
+            throw new Error(
+                'Supabase client accessed but environment variables are missing. ' +
+                'Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.'
+            )
+        }
+    }) as ReturnType<typeof createClient<Database>>
 
 /**
  * Server-side Supabase client factory
@@ -82,12 +69,17 @@ export function getServerSupabaseClient() {
         )
     }
 
+    // Runtime check for required vars
+    if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error('Supabase client failed to initialize: Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY')
+    }
+
     const serviceRoleKey = validateServerEnvVars()
 
     // If service role key is available, use it for admin operations
     if (serviceRoleKey) {
         return createClient<Database>(
-            SUPABASE_URL,
+            supabaseUrl,
             serviceRoleKey,
             {
                 auth: {
@@ -102,8 +94,8 @@ export function getServerSupabaseClient() {
     // This will still respect RLS policies
     console.warn('Using anon client for server operations - limited privileges')
     return createClient<Database>(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY,
+        supabaseUrl,
+        supabaseAnonKey,
         {
             auth: {
                 autoRefreshToken: false,
@@ -118,6 +110,6 @@ export function getServerSupabaseClient() {
  * Safe to use on client or server
  */
 export const getPublicEnv = () => ({
-    supabaseUrl: SUPABASE_URL,
+    supabaseUrl: supabaseUrl || '',
     siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
 })
