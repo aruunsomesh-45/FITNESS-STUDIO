@@ -2,7 +2,11 @@ import { MetadataRoute } from 'next'
 import { env } from '@/lib/env'
 
 export default function sitemap(): MetadataRoute.Sitemap {
+<<<<<<< HEAD
     const baseUrl = env.site.url
+=======
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zokufitness.com'
+>>>>>>> e32c146c101c0cf96e47ce9471a9c296a67da570
 
     return [
         {

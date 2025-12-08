@@ -26,29 +26,42 @@ export function ContactHero({ title, subtitle }: ContactHeroProps) {
                 script.async = true;
 
                 script.onload = () => {
-                    console.log('Unicorn Studio script loaded successfully');
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('Unicorn Studio script loaded successfully');
+                    }
                     scriptLoadedRef.current = true;
                     // Initialize after a short delay to ensure DOM is ready
                     setTimeout(() => {
                         if ((window as any).UnicornStudio) {
                             try {
                                 (window as any).UnicornStudio.init();
-                                console.log('Unicorn Studio initialized');
+                                if (process.env.NODE_ENV === 'development') {
+                                    console.log('Unicorn Studio initialized');
+                                }
                             } catch (error) {
-                                console.error('Error initializing Unicorn Studio:', error);
+                                // Only log errors in development to avoid exposing issues
+                                if (process.env.NODE_ENV === 'development') {
+                                    console.error('Error initializing Unicorn Studio:', error);
+                                }
                             }
                         }
                     }, 500);
                 };
 
                 script.onerror = (error) => {
-                    console.error('Failed to load Unicorn Studio script:', error);
+                    // Always log script loading errors as they indicate real issues
+                    if (process.env.NODE_ENV === 'development') {
+                        console.error('Failed to load Unicorn Studio script:', error);
+                    }
                     scriptLoadedRef.current = false;
                 };
 
                 document.head.appendChild(script);
             } catch (error) {
-                console.error('Error loading Unicorn Studio:', error);
+                // Only log in development
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('Error loading Unicorn Studio:', error);
+                }
             }
         };
 

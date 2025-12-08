@@ -1,4 +1,5 @@
 import { Users, Trophy, Clock, Zap } from "lucide-react";
+import Image from "next/image";
 import { GlowCard } from "@/components/ui/spotlight-card";
 
 const stats = [
@@ -17,11 +18,13 @@ export function About() {
             <div className="container mx-auto px-4 md:px-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div className="relative p-2 border-2 border-primary/30 rounded-sm">
-                        <div className="relative z-10 rounded-sm overflow-hidden border border-white/10">
-                            <img
+                        <div className="relative z-10 rounded-sm overflow-hidden border border-white/10 aspect-[4/3]">
+                            <Image
                                 src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop"
                                 alt="Gym Interior"
-                                className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
+                                fill
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className="object-cover hover:scale-105 transition-transform duration-700"
                             />
                         </div>
                     </div>

@@ -4,8 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+<<<<<<< HEAD
     "build": "NEXT_DISABLE_TURBOPACK=1 next build",
     "build:win": "set NEXT_DISABLE_TURBOPACK=1 && next build",
+=======
+    "build": "next build",
+    "build:legacy": "cross-env NEXT_DISABLE_TURBOPACK=1 next build",
+>>>>>>> e32c146c101c0cf96e47ce9471a9c296a67da570
     "start": "next start",
     "lint": "eslint"
   },
@@ -36,6 +41,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
     "eslint": "^9",
     "eslint-config-next": "16.0.5",
     "tailwindcss": "^4",

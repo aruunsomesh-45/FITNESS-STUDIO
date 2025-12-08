@@ -75,6 +75,10 @@ export async function POST(req: Request) {
             cancel_url: `${env.site.url}/membership`,
         });
 
+        if (!session.url) {
+            throw new Error("Failed to create checkout session URL");
+        }
+
         return NextResponse.json({ url: session.url });
     } catch (error) {
         console.error("Stripe checkout error:", error);

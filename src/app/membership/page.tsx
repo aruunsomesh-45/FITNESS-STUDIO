@@ -8,6 +8,7 @@ import { Dumbbell, Zap, Crown, Calendar } from "lucide-react";
 
 import { MembershipHero } from "@/components/MembershipHero";
 
+<<<<<<< HEAD
 const STRIPE_LINKS: Record<string, { monthly: string; yearly: string }> = {
     "drop-in": {
         monthly: "https://buy.stripe.com/test_8x2aEXf2F6mL37m0VKejK00",
@@ -26,6 +27,13 @@ const STRIPE_LINKS: Record<string, { monthly: string; yearly: string }> = {
         yearly: "https://buy.stripe.com/test_00w00jcUx4eDgYcawkejK06",
     },
 };
+=======
+import { useState, useEffect } from "react";
+import { PopupModal } from "react-calendly";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+
+const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/zoku-fitness";
+>>>>>>> e32c146c101c0cf96e47ce9471a9c296a67da570
 
 export default function MembershipPage() {
     const handlePlanSelect = (planId: string, isAnnual: boolean) => {
@@ -43,7 +51,11 @@ export default function MembershipPage() {
             description: "Perfect for travelers or commitment-phobes",
             icon: <Calendar className="w-8 h-8 text-primary" />,
             priceMonthly: 25,
+<<<<<<< HEAD
             priceYearly: 25, // Same price for drop-in
+=======
+            priceYearly: 250,
+>>>>>>> e32c146c101c0cf96e47ce9471a9c296a67da570
             users: "Per class access",
             features: [
                 { label: "Access to any class", included: true },
@@ -121,6 +133,39 @@ export default function MembershipPage() {
                 <TestimonialsGallery />
             </div>
             <Footer />
+<<<<<<< HEAD
+=======
+
+            {rootElement && (
+                <ErrorBoundary
+                    fallback={
+                        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+                            <div className="bg-background p-8 rounded-sm border border-white/10 max-w-md">
+                                <h2 className="text-2xl font-bold mb-4">Unable to load scheduling</h2>
+                                <p className="text-muted-foreground mb-6">
+                                    Please try refreshing the page or contact us directly.
+                                </p>
+                                <a
+                                    href={CALENDLY_URL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-primary text-primary-foreground px-6 py-3 rounded-sm font-bold uppercase tracking-wider hover:bg-white transition-colors inline-block"
+                                >
+                                    Open in New Tab
+                                </a>
+                            </div>
+                        </div>
+                    }
+                >
+                    <PopupModal
+                        url={CALENDLY_URL}
+                        onModalClose={() => setIsCalendlyOpen(false)}
+                        open={isCalendlyOpen}
+                        rootElement={rootElement}
+                    />
+                </ErrorBoundary>
+            )}
+>>>>>>> e32c146c101c0cf96e47ce9471a9c296a67da570
         </main>
     );
 }
