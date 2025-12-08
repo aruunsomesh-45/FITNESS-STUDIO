@@ -2,7 +2,17 @@
   "status": "commited",
   "type": "frontend",
   "scope": "codebase",
-  "localEndpoint": "http://localhost:3000/C:\\Users\\aruun\\OneDrive\\Documents\\Desktop\\newww",
+  "localEndpoint": "http://localhost:3000",
   "loginUser": "zoku",
-  "loginPassword": "arunsomesh"
+  "loginPassword": "arun1234",
+  "executionArgs": {
+    "projectName": "newww",
+    "projectPath": "C:\\Users\\aruun\\OneDrive\\Documents\\Desktop\\newww",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-wqkUO2EZLxYeoV51yJy3QENZSS161YT139rzQo2RBY169THEJ7NegztpUNnXv2e9DpLEduqu6AS6RHHIU3F0N6VPZdfS03mT6iY0LhManGcg2_tSFS0OdYmqRdeHcUwmZtQ"
+    }
+  },
+  "proxy": "http://a49bf820-22e4-4eaf-8030-8f96a0593ac7:Xev1JgKrB64jpJq0QUqbtSaYV8VDPCCV@tun.testsprite.com:8080"
 }

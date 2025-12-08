@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "project": "Zoku Fitness Website",
+    "date": "2025-12-05",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "Zoku Fitness is a modern, high-performance gym website featuring detailed information about the gym, its trainers, classes, membership plans, and a robust contact form integrated with a Supabase backend for reliable message submission and management.",
+  "core_goals": [
+    "Provide an engaging and informative online presence for Zoku Fitness.",
+    "Enable users to explore gym offerings including classes, trainers, and memberships.",
+    "Facilitate easy communication through a validated contact form integrated with Supabase.",
+    "Ensure secure handling of user data with environment variable management and RLS policies on the database.",
+    "Deliver a responsive and optimized user experience across devices with animations and modern UI components."
+  ],
+  "key_features": [
+    "A comprehensive Home page with hero, about preview, classes preview, membership preview, and contact preview sections.",
+    "About page showcasing gym information, achievements, trainers, and workout types.",
+    "Classes page displaying detailed fitness class information with images and descriptions.",
+    "Membership page featuring pricing plans and Calendly integration for scheduling consultations.",
+    "Contact page with a fully validated contact form, toast notifications, and Calendly scheduling link.",
+    "Contact Form API with both POST and GET endpoints, integrated with Supabase to store and retrieve messages securely.",
+    "Supabase integration with environment variable-based secure configuration, client and server-side handling, and Row Level Security (RLS) policies.",
+    "Responsive navbar with mobile menu, scroll effects, and active route highlighting.",
+    "Site footer containing useful links, social media icons, and copyright information."
+  ],
+  "user_flow_summary": [
+    "Users land on the Home page to get an overview of the gym offerings and can navigate easily to other main pages via the navbar.",
+    "Users visit the About page to learn about the gym, view trainer profiles, achievements, and workout types.",
+    "On the Classes page, users explore different fitness classes with detailed descriptions and images.",
+    "Users select and review membership plans on the Membership page and can schedule consultations via an embedded Calendly component.",
+    "Users visit the Contact page to fill out and submit the contact form; the form validates input in real-time and sends data securely to the backend.",
+    "Upon form submission, the server-side API validates the input and stores the message in the Supabase database table with RLS ensuring security.",
+    "Users receive instant success or error feedback via toast notifications after form submission.",
+    "Administrators can retrieve recent contact messages via the GET API endpoint for management and debugging."
+  ],
+  "validation_criteria": [
+    "Contact form must enforce all client-side validations correctly: name (2-100 chars), email (valid format and max 255 chars), subject (valid enum), and message (10-1000 chars).",
+    "Server-side API must validate inputs identically to client-side to prevent invalid data or injection attacks.",
+    "Supabase environment variables must be loaded properly; application must fail startup if missing with clear error messages.",
+    "Supabase Row Level Security (RLS) policies must be configured to allow anonymous INSERTs into contact_messages and only allow appropriate SELECT permissions.",
+    "Contact form submissions should complete with HTTP 201 and store data in Supabase successfully.",
+    "API GET endpoint should return recent saved messages securely and only for authorized users, rated for debugging/admin use.",
+    "Frontend must display informative success and error messages with appropriate loading states and prevent double submissions.",
+    "Navbar and Footer must be responsive and correctly display across all device sizes.",
+    "Metadata and SEO features including sitemap, robots.txt, and social sharing metadataBase URL must be present for proper indexing and sharing."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "TypeScript",
+      "Next.js 16.0.5",
+      "React 19.2.0",
+      "Supabase",
+      "Tailwind CSS",
+      "Framer Motion",
+      "GSAP",
+      "Three.js",
+      "Calendly"
+    ],
+    "features": [
+      {
+        "name": "Contact Form API",
+        "description": "Handles contact form submissions with validation and stores them in Supabase contact_messages table",
+        "files": [
+          "src/app/api/contact/route.ts",
+          "src/components/Contact.tsx"
+        ],
+        "api_doc": {
+          "openapi": "3.0.0",
+          "info": {
+            "title": "Contact Form API",
+            "version": "1.0.0"
+          },
+          "paths": {
+            "/api/contact": {
+              "post": {
+                "summary": "Submit contact form",
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "email",
+                          "subject",
+                          "message"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 100
+                          },
+                          "email": {
+                            "type": "string",
+                            "format": "email",
+                            "maxLength": 255
+                          },
+                          "subject": {
+                            "type": "string",
+                            "enum": [
+                              "General Inquiry",
+                              "Membership",
+                              "Personal Training",
+                              "Careers"
+                            ]
+                          },
+                          "message": {
+                            "type": "string",
+                            "minLength": 10,
+                            "maxLength": 1000
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "201": {
+                    "description": "Message sent successfully"
+                  },
+                  "400": {
+                    "description": "Validation error"
+                  },
+                  "500": {
+                    "description": "Server error"
+                  }
+                }
+              },
+              "get": {
+                "summary": "Retrieve contact messages (admin/debug)",
+                "responses": {
+                  "200": {
+                    "description": "List of messages"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Home Page",
+        "description": "Main landing page with hero section, about preview, classes preview, membership preview, and contact preview",
+        "files": [
+          "src/app/page.tsx",
+          "src/components/HorizonHero.tsx",
+          "src/components/ui/horizon-hero-section.tsx"
+        ]
+      },
+      {
+        "name": "About Page",
+        "description": "About page showcasing gym information, achievements, trainers, and workout types",
+        "files": [
+          "src/app/about/page.tsx",
+          "src/components/About.tsx",
+          "src/components/AboutMarqueeHero.tsx",
+          "src/components/Achievements.tsx",
+          "src/components/Trainers.tsx",
+          "src/components/WorkoutTypes.tsx"
+        ]
+      },
+      {
+        "name": "Classes Page",
+        "description": "Displays available fitness classes with descriptions and images",
+        "files": [
+          "src/app/classes/page.tsx",
+          "src/components/Classes.tsx",
+          "src/components/ClassesHero.tsx",
+          "src/components/BrandCarousel.tsx"
+        ]
+      },
+      {
+        "name": "Membership Page",
+        "description": "Membership plans with pricing, features, and Calendly integration for scheduling",
+        "files": [
+          "src/app/membership/page.tsx",
+          "src/app/membership/layout.tsx",
+          "src/components/MembershipHero.tsx",
+          "src/components/ui/pricing-module.tsx",
+          "src/components/TestimonialsGallery.tsx"
+        ]
+      },
+      {
+        "name": "Contact Page",
+        "description": "Contact form with validation, Supabase integration, and Calendly scheduling link",
+        "files": [
+          "src/app/contact/page.tsx",
+          "src/components/Contact.tsx",
+          "src/components/ContactHero.tsx"
+        ]
+      },
+      {
+        "name": "Supabase Integration",
+        "description": "Database client setup with environment variable validation, server-side and client-side clients",
+        "files": [
+          "src/lib/supabase.ts",
+          "src/lib/database.types.ts"
+        ]
+      },
+      {
+        "name": "Navigation",
+        "description": "Responsive navbar with mobile menu, scroll effects, and active route highlighting",
+        "files": [
+          "src/components/Navbar.tsx"
+        ]
+      },
+      {
+        "name": "Footer",
+        "description": "Site footer with links, social media, and copyright",
+        "files": [
+          "src/components/Footer.tsx"
+        ]
+      }
+    ]
+  }
+}

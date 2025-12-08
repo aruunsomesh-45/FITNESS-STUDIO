@@ -1,0 +1,558 @@
+[
+  {
+    "id": "TC001",
+    "title": "Submit Contact Form with Valid Data",
+    "description": "Verify that the contact form is submitted successfully when all fields have valid data and the server returns HTTP 201.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Contact page."
+      },
+      {
+        "type": "action",
+        "description": "Fill 'Name' field with 5-character valid name."
+      },
+      {
+        "type": "action",
+        "description": "Fill 'Email' field with a valid email format under 255 characters."
+      },
+      {
+        "type": "action",
+        "description": "Select a valid subject from the enum list (General Inquiry, Membership, Personal Training, Careers)."
+      },
+      {
+        "type": "action",
+        "description": "Fill 'Message' field with valid text between 10 and 1000 characters."
+      },
+      {
+        "type": "action",
+        "description": "Submit the contact form."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the form submission returns HTTP 201 status and a success toast notification is displayed."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that the message is stored in Supabase contact_messages table."
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Contact Form Client-Side Validation Enforce Name Field Constraints",
+    "description": "Verify that the Name field enforces minimum length of 2 and maximum length of 100 characters on client side and displays validation errors.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Contact page."
+      },
+      {
+        "type": "action",
+        "description": "Input a single character in Name field."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error message is displayed for Name field length."
+      },
+      {
+        "type": "action",
+        "description": "Input a string exceeding 100 characters in Name field."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error message is displayed for Name field length."
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Contact Form Client-Side Validation Enforce Email Constraints",
+    "description": "Verify that the Email field enforces valid email format and maximum length of 255 characters and displays validation errors.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Contact page."
+      },
+      {
+        "type": "action",
+        "description": "Input invalid email format (e.g., 'useratexampledotcom') in Email field."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error message is displayed for Email field format."
+      },
+      {
+        "type": "action",
+        "description": "Input a valid email string exceeding 255 characters."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error message is displayed for Email field length."
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Contact Form Client-Side Validation Enforce Subject Enum",
+    "description": "Verify that the Subject field only allows valid enum selections and rejects invalid entries.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Contact page."
+      },
+      {
+        "type": "action",
+        "description": "Try to select or input invalid subject value (not in General Inquiry, Membership, Personal Training, Careers)."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the form does not accept invalid subject values and displays an error or prevents submission."
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Contact Form Client-Side Validation Enforce Message Length",
+    "description": "Verify that the Message field enforces minimum length of 10 and maximum length of 1000 characters with appropriate validation messages.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Contact page."
+      },
+      {
+        "type": "action",
+        "description": "Input less than 10 characters in Message field."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error message is displayed for Message field length."
+      },
+      {
+        "type": "action",
+        "description": "Input over 1000 characters in Message field."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation error message is displayed for Message field length."
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Prevent Double Submission on Contact Form",
+    "description": "Verify that while a contact form submission is processing, the submit button is disabled or multiple submissions cannot be triggered.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Fill Contact form with valid data."
+      },
+      {
+        "type": "action",
+        "description": "Click submit button multiple times rapidly."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that only one submission is processed and the button is disabled or blocked during submission."
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Server-Side Contact Form Input Validation Rejects Invalid Data",
+    "description": "Verify that the POST API endpoint validates all fields according to rules and returns HTTP 400 for invalid input.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send POST request to /api/contact with invalid Name (e.g., 1 character)."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify server responds with HTTP 400 and appropriate validation error."
+      },
+      {
+        "type": "action",
+        "description": "Send POST request with invalid Email format."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify HTTP 400 response with email validation error."
+      },
+      {
+        "type": "action",
+        "description": "Send POST request with invalid Subject not in enum."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify HTTP 400 response with subject validation error."
+      },
+      {
+        "type": "action",
+        "description": "Send POST request with Message less than 10 or more than 1000 characters."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify HTTP 400 response with message validation error."
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Server-Side Contact Form API Success Response and Data Storage",
+    "description": "Verify that the server correctly stores valid contact message data in Supabase and returns HTTP 201 on successful POST.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send valid POST request with valid contact data to /api/contact."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify server responds with HTTP 201 status."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify message is stored in Supabase contact_messages table with correct data."
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Supabase Environment Variables Load and Application Startup Fails When Missing",
+    "description": "Verify that the application does not start if required Supabase environment variables are missing and shows clear error messages.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Remove or unset a required Supabase environment variable."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to start the application."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the application fails startup with clear error explaining missing configuration."
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Supabase Row Level Security (RLS) Policies Enforce Correct Permissions",
+    "description": "Verify that anonymous users can INSERT into contact_messages but cannot SELECT, and authorized admin users can SELECT messages.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt anonymous INSERT into contact_messages via Contact form."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify INSERT succeeds."
+      },
+      {
+        "type": "action",
+        "description": "Attempt anonymous SELECT from contact_messages API GET endpoint."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify SELECT is denied or returns empty data."
+      },
+      {
+        "type": "action",
+        "description": "Attempt to SELECT messages with authorized admin credentials."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify SELECT returns list of messages."
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "GET API Endpoint Returns Recent Contact Messages Only for Authorized Users",
+    "description": "Verify that the GET /api/contact returns a list of recent messages when called with valid admin authorization and denies unauthorized requests.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Send GET request to /api/contact without authorization."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response denies access or returns HTTP 403/401."
+      },
+      {
+        "type": "action",
+        "description": "Send GET request with valid admin authorization token."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response returns HTTP 200 with list of recent messages."
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Display Toast Notifications for Success and Error States on Contact Form",
+    "description": "Verify that after form submission, appropriate success or error toast notifications are displayed, and loading states are shown during submission.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Submit Contact form with valid data."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify loading state is displayed and success toast notification appears post submission."
+      },
+      {
+        "type": "action",
+        "description": "Submit Contact form with invalid data."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify validation errors and error toast notification are displayed."
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Responsive Navbar Displays Correctly Across Devices",
+    "description": "Verify navbar and mobile menu render and function correctly on desktop, tablet, and mobile screen sizes with scroll and active route highlight.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load site on desktop screen size."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify full navbar is visible with correct links and active route highlighting."
+      },
+      {
+        "type": "action",
+        "description": "Resize browser to tablet size and verify navbar adapts."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify navbar condenses and mobile menu toggles properly."
+      },
+      {
+        "type": "action",
+        "description": "Use site on mobile size."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify mobile menu opens and closes, links are clickable and active route highlight works."
+      },
+      {
+        "type": "action",
+        "description": "Scroll page on desktop and mobile."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify scroll effects on navbar are correctly applied."
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Footer Displays Correctly with Links and Social Icons on All Device Sizes",
+    "description": "Verify site footer renders with all useful links, social media icons, and copyright info correctly on desktop and mobile.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load site footer on desktop screen."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify footer displays all expected links, icons, and text."
+      },
+      {
+        "type": "action",
+        "description": "Load site footer on mobile screen."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify footer is readable, icons are tappable, and layout is responsive."
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Membership Page Calendly Scheduling Integration Works Correctly",
+    "description": "Verify that membership page displays pricing plans and embedded Calendly scheduling component functions correctly for booking consultations.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Membership page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify pricing plans are visible and formatted as expected."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify embedded Calendly scheduling widget loads successfully."
+      },
+      {
+        "type": "action",
+        "description": "Interact with Calendly widget to book a consultation."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify scheduling process completes without errors."
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Home Page Components Render and Animate Correctly",
+    "description": "Verify that home page sections (hero, about preview, classes preview, membership preview, contact preview) render correctly with animations and interactivity.",
+    "category": "ui",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Home page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify hero section loads with correct heading and call-to-action."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify about, classes, membership, and contact preview sections display summary content."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify animations trigger correctly on scroll or entry."
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "About Page Displays Trainer Profiles and Achievements",
+    "description": "Verify About page renders gym info, trainer profiles, achievements, and listed workout types with correct data and layout.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to About page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify gym information and achievements block is visible."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify trainer profiles are displayed with images and details."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify workout types list is rendered correctly."
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Classes Page Displays Fitness Class Descriptions and Images",
+    "description": "Verify that the classes page shows all fitness classes with proper descriptions, images, and related content with carousel if applicable.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Classes page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify each class is displayed with title, description, and image."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify any carousel or brand carousel functions smoothly with navigation controls."
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Contact Page Calendly Scheduling Link Works and Form Validation is Real-Time",
+    "description": "Verify contact page displays Calendly scheduling link and that the contact form validates inputs in real-time as user types.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to Contact page."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify Calendly scheduling link is visible and clickable."
+      },
+      {
+        "type": "action",
+        "description": "Enter invalid data into form fields and observe validation messages appear or update in real-time."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that validation feedback updates without page reload."
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Metadata and SEO Features Are Present Including Sitemap and Robots.txt",
+    "description": "Verify that base URL, sitemap.xml, robots.txt, and social sharing metadata are present and correctly configured for proper indexing and sharing.",
+    "category": "functional",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Request base URL and verify it is set correctly."
+      },
+      {
+        "type": "action",
+        "description": "Request /sitemap.xml and verify file exists and contains valid entries."
+      },
+      {
+        "type": "action",
+        "description": "Request /robots.txt and verify file exists with valid rules."
+      },
+      {
+        "type": "action",
+        "description": "Inspect page source metadata tags for social sharing (Open Graph, Twitter Card)."
+      },
+      {
+        "type": "assertion",
+        "description": "Verify metadata tags are present and accurate."
+      }
+    ]
+  }
+]
