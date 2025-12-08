@@ -65,17 +65,23 @@ export async function POST(request: Request) {
             );
         }
 
-        // Insert validated data into Supabase
-        let supabase;
-        try {
-            supabase = getServerSupabaseClient();
-        } catch (supabaseError) {
-            console.error('Failed to initialize Supabase client:', supabaseError);
+        // Initialize Supabase client
+        // We use the anonymous key here because the 'contact_messages' table
+        // has RLS policies that allow public inserts. This avoids needing the
+        // service role key which might be missing in some environments.
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+        if (!supabaseUrl || !supabaseAnonKey) {
+            console.error('Missing Supabase environment variables');
             return NextResponse.json(
                 { error: 'Configuration error. Please contact support directly.' },
                 { status: 500 }
             );
         }
+
+        const { createClient } = require('@supabase/supabase-js');
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
         const { data, error } = await supabase
             .from('contact_messages')
@@ -94,7 +100,7 @@ export async function POST(request: Request) {
             const errorMessage = error.code === 'PGRST116' || error.message?.includes('relation')
                 ? 'Database not configured. Please contact support directly.'
                 : 'Failed to save your message. Please try again later.';
-            
+
             return NextResponse.json(
                 { error: errorMessage },
                 { status: 500 }
@@ -132,7 +138,7 @@ export async function GET(request: Request) {
     const apiKey = request.headers.get('x-api-key');
     const validApiKey = process.env.ADMIN_API_KEY;
     const isDevelopment = process.env.NODE_ENV === 'development';
-    
+
     // If API key is configured, always validate it
     if (validApiKey) {
         if (!apiKey || apiKey !== validApiKey) {
@@ -146,7 +152,7 @@ export async function GET(request: Request) {
         if (!isDevelopment) {
             // In production, always require API key
             return NextResponse.json(
-                { 
+                {
                     error: 'Unauthorized: API key not configured',
                     message: 'Contact administrator'
                 },
@@ -156,7 +162,7 @@ export async function GET(request: Request) {
         // In development, allow access without API key for testing
         // (This is intentional for local development/testing)
     }
-    
+
     try {
         const supabase = getServerSupabaseClient();
         const { data, error } = await supabase
