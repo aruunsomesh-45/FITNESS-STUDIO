@@ -1,80 +1,105 @@
-
 "use client";
 
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { PricingModule } from "@/components/ui/pricing-module";
 import { TestimonialsGallery } from "@/components/TestimonialsGallery";
-import { Layers, Monitor, Users, Building2 } from "lucide-react";
+import { Dumbbell, Zap, Crown, Calendar } from "lucide-react";
 
 import { MembershipHero } from "@/components/MembershipHero";
 
-import { useState, useEffect } from "react";
-import { PopupModal } from "react-calendly";
-import { env } from "@/lib/env";
+const STRIPE_LINKS: Record<string, { monthly: string; yearly: string }> = {
+    "drop-in": {
+        monthly: "https://buy.stripe.com/test_8x2aEXf2F6mL37m0VKejK00",
+        yearly: "https://buy.stripe.com/test_8x2aEXf2F6mL37m0VKejK00", // One-time payment
+    },
+    "unlimited": {
+        monthly: "https://buy.stripe.com/test_bJeeVdaMpcL9gYc1ZOejK01",
+        yearly: "https://buy.stripe.com/test_dRmdR9bQtbH55fu47WejK02",
+    },
+    "annual": {
+        monthly: "https://buy.stripe.com/test_28E9AT1bP4eDfU80VKejK03",
+        yearly: "https://buy.stripe.com/test_8x27sL2fT7qP9vK33SejK04",
+    },
+    "premium": {
+        monthly: "https://buy.stripe.com/test_28EaEX2fTcL94bq1ZOejK05",
+        yearly: "https://buy.stripe.com/test_00w00jcUx4eDgYcawkejK06",
+    },
+};
 
 export default function MembershipPage() {
-    const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
-    const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+    const handlePlanSelect = (planId: string, isAnnual: boolean) => {
+        const links = STRIPE_LINKS[planId];
+        if (links) {
+            const url = isAnnual ? links.yearly : links.monthly;
+            window.open(url, "_blank");
+        }
+    };
 
-    useEffect(() => {
-        setRootElement(document.body);
-    }, []);
     const plans = [
         {
-            id: "starter",
-            name: "Starter",
-            description: "For individuals and small projects",
-            icon: <Layers className="w-8 h-8 text-primary" />,
-            priceMonthly: 9,
-            priceYearly: 90,
-            users: "Up to 3 users",
+            id: "drop-in",
+            name: "Drop-In",
+            description: "Perfect for travelers or commitment-phobes",
+            icon: <Calendar className="w-8 h-8 text-primary" />,
+            priceMonthly: 25,
+            priceYearly: 25, // Same price for drop-in
+            users: "Per class access",
             features: [
-                { label: "Basic analytics", included: true },
-                { label: "Community access", included: true },
-                { label: "Priority support", included: false },
-            ],
-        }, {
-            id: "basic",
-            name: "Basic",
-            description: "For small teams getting started",
-            icon: <Monitor className="w-8 h-8 text-primary" />,
-            priceMonthly: 29,
-            priceYearly: 290,
-            users: "Up to 10 users",
-            features: [
-                { label: "Advanced analytics", included: true },
-                { label: "Priority support", included: true },
-                { label: "Team collaboration tools", included: false },
+                { label: "Access to any class", included: true },
+                { label: "Towel service", included: true },
+                { label: "Locker access", included: true },
+                { label: "Sauna access", included: false },
+                { label: "Guest passes", included: false },
             ],
         },
         {
-            id: "team",
-            name: "Team",
-            description: "For growing startups and agencies",
-            icon: <Users className="w-8 h-8 text-primary" />,
-            priceMonthly: 99,
-            priceYearly: 990,
-            users: "Up to 50 users",
+            id: "unlimited",
+            name: "Unlimited",
+            description: "The ultimate Zoku experience without limits",
+            icon: <Zap className="w-8 h-8 text-primary" />,
+            priceMonthly: 149,
+            priceYearly: 1490,
+            users: "Unlimited access",
             features: [
-                { label: "Dedicated success manager", included: true },
-                { label: "Custom integrations", included: true },
-                { label: "AI-powered insights", included: true },
+                { label: "Unlimited classes", included: true },
+                { label: "Priority booking", included: true },
+                { label: "Guest passes (2/month)", included: true },
+                { label: "Sauna access", included: true },
+                { label: "Merch discount", included: true },
             ],
             recommended: true,
         },
         {
-            id: "enterprise",
-            name: "Enterprise",
-            description: "For large organizations with custom needs",
-            icon: <Building2 className="w-8 h-8 text-primary" />,
-            priceMonthly: 199,
-            priceYearly: 1990,
-            users: "Unlimited users",
+            id: "annual",
+            name: "Annual",
+            description: "Commit to your best self and save",
+            icon: <Crown className="w-8 h-8 text-primary" />,
+            priceMonthly: 129,
+            priceYearly: 1290,
+            users: "All-inclusive access",
             features: [
-                { label: "24/7 priority support", included: true },
-                { label: "Custom SLAs", included: true },
-                { label: "Private cloud hosting", included: true },
+                { label: "All Unlimited perks", included: true },
+                { label: "Free personal training (1/month)", included: true },
+                { label: "Nutrition consultation", included: true },
+                { label: "Exclusive workshops", included: true },
+                { label: "Priority equipment access", included: true },
+            ],
+        },
+        {
+            id: "premium",
+            name: "Premium",
+            description: "Ultimate experience with personal training",
+            icon: <Dumbbell className="w-8 h-8 text-primary" />,
+            priceMonthly: 249,
+            priceYearly: 2490,
+            users: "VIP access",
+            features: [
+                { label: "All Annual perks", included: true },
+                { label: "Unlimited personal training", included: true },
+                { label: "Custom meal plans", included: true },
+                { label: "24/7 facility access", included: true },
+                { label: "Dedicated trainer", included: true },
             ],
         },
     ];
@@ -85,26 +110,17 @@ export default function MembershipPage() {
             <MembershipHero />
             <div className="pt-10">
                 <PricingModule
-                    title="Simple, Transparent Pricing"
-                    subtitle="Switch between monthly and yearly billing anytime."
-                    annualBillingLabel="Pay annually and save 20%"
-                    buttonLabel="Start Now"
+                    title="Membership Plans"
+                    subtitle="Choose the plan that fits your fitness journey. No hidden fees, just pure results."
+                    annualBillingLabel="Pay annually and save"
+                    buttonLabel="Join Now"
                     plans={plans}
                     defaultAnnual={false}
-                    onPlanSelect={() => setIsCalendlyOpen(true)}
+                    onPlanSelect={handlePlanSelect}
                 />
                 <TestimonialsGallery />
             </div>
             <Footer />
-
-            {rootElement && (
-                <PopupModal
-                    url={env.calendly.url}
-                    onModalClose={() => setIsCalendlyOpen(false)}
-                    open={isCalendlyOpen}
-                    rootElement={rootElement}
-                />
-            )}
         </main>
     );
 }

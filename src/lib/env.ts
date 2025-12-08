@@ -37,4 +37,8 @@ export const env = {
     calendly: {
         url: CALENDLY_URL,
     },
+    stripe: {
+        secretKey: process.env.STRIPE_SECRET_KEY || '',
+        publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
+    },
 } as const;

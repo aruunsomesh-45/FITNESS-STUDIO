@@ -8,19 +8,34 @@ import { Dumbbell, Zap, Crown, Calendar } from "lucide-react";
 
 import { MembershipHero } from "@/components/MembershipHero";
 
-import { useState, useEffect } from "react";
-import { PopupModal } from "react-calendly";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-
-const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com/zoku-fitness";
+const STRIPE_LINKS: Record<string, { monthly: string; yearly: string }> = {
+    "drop-in": {
+        monthly: "https://buy.stripe.com/test_8x2aEXf2F6mL37m0VKejK00",
+        yearly: "https://buy.stripe.com/test_8x2aEXf2F6mL37m0VKejK00", // One-time payment
+    },
+    "unlimited": {
+        monthly: "https://buy.stripe.com/test_bJeeVdaMpcL9gYc1ZOejK01",
+        yearly: "https://buy.stripe.com/test_dRmdR9bQtbH55fu47WejK02",
+    },
+    "annual": {
+        monthly: "https://buy.stripe.com/test_28E9AT1bP4eDfU80VKejK03",
+        yearly: "https://buy.stripe.com/test_8x27sL2fT7qP9vK33SejK04",
+    },
+    "premium": {
+        monthly: "https://buy.stripe.com/test_28EaEX2fTcL94bq1ZOejK05",
+        yearly: "https://buy.stripe.com/test_00w00jcUx4eDgYcawkejK06",
+    },
+};
 
 export default function MembershipPage() {
-    const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
-    const [rootElement, setRootElement] = useState<HTMLElement | null>(null);
+    const handlePlanSelect = (planId: string, isAnnual: boolean) => {
+        const links = STRIPE_LINKS[planId];
+        if (links) {
+            const url = isAnnual ? links.yearly : links.monthly;
+            window.open(url, "_blank");
+        }
+    };
 
-    useEffect(() => {
-        setRootElement(document.body);
-    }, []);
     const plans = [
         {
             id: "drop-in",
@@ -28,7 +43,7 @@ export default function MembershipPage() {
             description: "Perfect for travelers or commitment-phobes",
             icon: <Calendar className="w-8 h-8 text-primary" />,
             priceMonthly: 25,
-            priceYearly: 250,
+            priceYearly: 25, // Same price for drop-in
             users: "Per class access",
             features: [
                 { label: "Access to any class", included: true },
@@ -101,41 +116,11 @@ export default function MembershipPage() {
                     buttonLabel="Join Now"
                     plans={plans}
                     defaultAnnual={false}
-                    onPlanSelect={() => setIsCalendlyOpen(true)}
+                    onPlanSelect={handlePlanSelect}
                 />
                 <TestimonialsGallery />
             </div>
             <Footer />
-
-            {rootElement && (
-                <ErrorBoundary
-                    fallback={
-                        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-                            <div className="bg-background p-8 rounded-sm border border-white/10 max-w-md">
-                                <h2 className="text-2xl font-bold mb-4">Unable to load scheduling</h2>
-                                <p className="text-muted-foreground mb-6">
-                                    Please try refreshing the page or contact us directly.
-                                </p>
-                                <a
-                                    href={CALENDLY_URL}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="bg-primary text-primary-foreground px-6 py-3 rounded-sm font-bold uppercase tracking-wider hover:bg-white transition-colors inline-block"
-                                >
-                                    Open in New Tab
-                                </a>
-                            </div>
-                        </div>
-                    }
-                >
-                    <PopupModal
-                        url={CALENDLY_URL}
-                        onModalClose={() => setIsCalendlyOpen(false)}
-                        open={isCalendlyOpen}
-                        rootElement={rootElement}
-                    />
-                </ErrorBoundary>
-            )}
         </main>
     );
 }

@@ -39,7 +39,7 @@ export interface PricingModuleProps {
     plans: PricingPlan[];
     defaultAnnual?: boolean;
     className?: string;
-    onPlanSelect?: (planId: string) => void;
+    onPlanSelect?: (planId: string, isAnnual: boolean) => void;
 }
 
 export function PricingModule({
@@ -124,7 +124,7 @@ export function PricingModule({
                                     <Button
                                         variant={plan.recommended ? "default" : "outline"}
                                         className="w-full mb-6"
-                                        onClick={() => onPlanSelect?.(plan.id)}
+                                        onClick={() => onPlanSelect?.(plan.id, isAnnual)}
                                     >
                                         {buttonLabel}
                                     </Button>

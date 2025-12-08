@@ -1,0 +1,441 @@
+{
+  "meta": {
+    "project": "Zoku Fitness Contact Form Feature",
+    "date": "2025-11-19",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "A robust contact form feature integrated with Supabase for the Zoku Fitness website, enabling users to submit inquiries securely with comprehensive validation and backend persistence.",
+  "core_goals": [
+    "Enable users to submit contact messages with client-side and server-side validation.",
+    "Ensure secure and reliable data persistence to the Supabase database with RLS policies.",
+    "Provide admin functionalities for fetching recent contact messages securely.",
+    "Implement server-side environment variable management for secure API usage.",
+    "Enhance user experience with clear success and error feedback on message submission."
+  ],
+  "key_features": [
+    "Client-side contact form implemented with React and real-time validation enforcing field requirements.",
+    "Server-side API endpoint for POST submissions of contact messages with rigorous validation and sanitization.",
+    "Supabase integration for storing contact messages in the 'contact_messages' table with RLS for security.",
+    "GET API endpoint to fetch 20 most recent contact messages, secured with API key authentication for admin use.",
+    "Robust error handling in the API to respond appropriately to validation and server errors.",
+    "Environment variable driven Supabase client configuration with runtime validation to prevent unauthorized access."
+  ],
+  "user_flow_summary": [
+    "User fills out the contact form fields: name, email, subject, and message, supported by real-time validation with error messages.",
+    "User submits the form triggering a POST request to /api/contact with the validated data.",
+    "Server-side process validates input again, sanitizes, and inserts the message into the Supabase database.",
+    "API responds with success message and an ID if stored successfully or an error message in case of validation/server failure.",
+    "Frontend shows success or error notification based on API response and resets the form on success.",
+    "Admins retrieve recent messages via GET /api/contact providing a valid API key, receiving a list of recent submissions."
+  ],
+  "validation_criteria": [
+    "All form fields enforce length and format constraints both client-side and server-side.",
+    "POST API endpoint returns 201 status and message ID on valid submissions.",
+    "API returns 400 status on validation failures with descriptive error messages.",
+    "API returns 401 for missing/invalid admin API key when fetching messages.",
+    "Supabase client initialization fails gracefully if environment variables are missing or improperly loaded.",
+    "Contact form submissions persist the exact data to the database matching schema requirements.",
+    "Successful submission triggers UI to reset the form and display a confirmation message.",
+    "Robust rate limiting and error boundaries recommended to ensure stability (to be implemented)."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "TypeScript",
+      "Next.js 16 App Router",
+      "React 19",
+      "Tailwind CSS (v4)",
+      "Supabase (PostgreSQL)",
+      "Radix UI",
+      "GSAP / Framer Motion"
+    ],
+    "features": [
+      {
+        "name": "Contact Messaging API",
+        "description": "Validates contact form submissions, persists them to the Supabase 'contact_messages' table, and exposes a secured admin fetch endpoint.",
+        "files": [
+          "src/app/api/contact/route.ts",
+          "src/lib/supabase.ts",
+          "src/lib/database.types.ts"
+        ],
+        "api_doc": {
+          "openapi": "3.0.3",
+          "info": {
+            "title": "Contact Messaging API",
+            "version": "1.0.0"
+          },
+          "paths": {
+            "/api/contact": {
+              "post": {
+                "summary": "Submit a contact form message",
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "name",
+                          "email",
+                          "subject",
+                          "message"
+                        ],
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 100
+                          },
+                          "email": {
+                            "type": "string",
+                            "format": "email",
+                            "maxLength": 255
+                          },
+                          "subject": {
+                            "type": "string",
+                            "enum": [
+                              "General Inquiry",
+                              "Membership",
+                              "Personal Training",
+                              "Careers"
+                            ]
+                          },
+                          "message": {
+                            "type": "string",
+                            "minLength": 10,
+                            "maxLength": 1000
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "201": {
+                    "description": "Message stored successfully",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean"
+                            },
+                            "message": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string",
+                              "format": "uuid"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "400": {
+                    "description": "Validation error"
+                  },
+                  "500": {
+                    "description": "Unexpected server or database error"
+                  }
+                }
+              },
+              "get": {
+                "summary": "List recent contact messages",
+                "parameters": [
+                  {
+                    "name": "x-api-key",
+                    "in": "header",
+                    "required": true,
+                    "schema": {
+                      "type": "string"
+                    },
+                    "description": "Must match ADMIN_API_KEY when configured"
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "Array of the 20 most recent messages",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "messages": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/ContactMessage"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "401": {
+                    "description": "Missing or invalid API key (required in production)"
+                  },
+                  "500": {
+                    "description": "Failure fetching records"
+                  }
+                }
+              }
+            }
+          },
+          "components": {
+            "schemas": {
+              "ContactMessage": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "full_name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "subject": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  },
+                  "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "name": "Supabase Fitness Data Service",
+        "description": "Centralized helper that reads and mutates Supabase tables (trainers, classes, bookings, profiles) for UI components and hooks.",
+        "files": [
+          "src/lib/api.ts",
+          "src/lib/hooks/useTrainers.ts",
+          "src/lib/hooks/useClasses.ts",
+          "src/lib/supabase.ts"
+        ],
+        "api_doc": {
+          "openapi": "3.0.3",
+          "info": {
+            "title": "Supabase Fitness Data Service",
+            "version": "1.0.0"
+          },
+          "servers": [
+            {
+              "url": "{supabaseUrl}/rest/v1",
+              "variables": {
+                "supabaseUrl": {
+                  "default": "https://YOUR-SUPABASE-PROJECT.supabase.co"
+                }
+              }
+            }
+          ],
+          "paths": {
+            "/trainers": {
+              "get": {
+                "summary": "List trainers sorted by name",
+                "parameters": [
+                  {
+                    "name": "select",
+                    "in": "query",
+                    "schema": {
+                      "type": "string",
+                      "default": "*"
+                    }
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "Trainers array"
+                  }
+                }
+              }
+            },
+            "/classes": {
+              "get": {
+                "summary": "List classes with related trainer records",
+                "parameters": [
+                  {
+                    "name": "select",
+                    "in": "query",
+                    "schema": {
+                      "type": "string",
+                      "default": "*,trainers(*)"
+                    }
+                  },
+                  {
+                    "name": "order",
+                    "in": "query",
+                    "schema": {
+                      "type": "string",
+                      "default": "start_time.asc"
+                    }
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "Classes array"
+                  }
+                }
+              }
+            },
+            "/bookings": {
+              "post": {
+                "summary": "Reserve a class for a user",
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "required": [
+                          "class_id",
+                          "user_id"
+                        ],
+                        "properties": {
+                          "class_id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "user_id": {
+                            "type": "string",
+                            "format": "uuid"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "201": {
+                    "description": "Booking created"
+                  }
+                }
+              },
+              "patch": {
+                "summary": "Update booking status (e.g., cancel)",
+                "parameters": [
+                  {
+                    "name": "id",
+                    "in": "query",
+                    "required": true,
+                    "schema": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  }
+                ],
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "confirmed",
+                              "cancelled"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "200": {
+                    "description": "Booking updated"
+                  }
+                }
+              }
+            },
+            "/profiles": {
+              "get": {
+                "summary": "Fetch user profile by id",
+                "parameters": [
+                  {
+                    "name": "id",
+                    "in": "query",
+                    "required": true,
+                    "schema": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "Profile record"
+                  }
+                }
+              },
+              "patch": {
+                "summary": "Update profile fields",
+                "parameters": [
+                  {
+                    "name": "id",
+                    "in": "query",
+                    "required": true,
+                    "schema": {
+                      "type": "string",
+                      "format": "uuid"
+                    }
+                  }
+                ],
+                "requestBody": {
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "full_name": {
+                            "type": "string"
+                          },
+                          "avatar_url": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "responses": {
+                  "200": {
+                    "description": "Profile updated"
+                  }
+                }
+              }
+            }
+          },
+          "components": {
+            "securitySchemes": {
+              "supabaseKey": {
+                "type": "apiKey",
+                "name": "apiKey",
+                "in": "header"
+              }
+            }
+          },
+          "security": [
+            {
+              "supabaseKey": []
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
